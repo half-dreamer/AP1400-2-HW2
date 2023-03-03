@@ -4,7 +4,6 @@
 #include "server.h"
 #include "client.h"
 
-/*
 TEST(HW1Test, TEST1) {
     Server server{};
     auto bryan{server.add_client("bryan")};
@@ -24,6 +23,7 @@ TEST(HW1Test, TEST3) {
     EXPECT_DOUBLE_EQ(bryan->get_wallet(), 5.0);
 }
 
+/*
 TEST(HW1Test, TEST4) {
     Server server{};
     auto bryan1{server.add_client("bryan")};
