@@ -1,11 +1,27 @@
 #include "server.h"
 #include "client.h"
 #include <random>
+#include <regex>
 
 using std::make_pair;
 using std::make_shared;
 using std::pair;
+using std::logic_error;
+using std::runtime_error;
 
+/*  
+class Server: 
+    private:
+	std::map<std::shared_ptr<Client>, double> clients; // pair<client, wallet>
+*/
+
+ void show_wallets(const  Server& server)
+ {
+ 	std::cout << std::string(20, '*') << std::endl;
+ 	for(const auto& client: server.clients)
+ 		std::cout << client.first->get_id() <<  " : "  << client.second << std::endl;
+ 	std::cout << std::string(20, '*') << std::endl;
+ }
 
 Server::Server()
 {
@@ -24,7 +40,7 @@ std::shared_ptr<Client> Server::add_client(std::string id)
     clients.insert(make_pair(addedClient, 5));
     return addedClient;
 }
-std::shared_ptr<Client> Server::get_client(std::string id)
+std::shared_ptr<Client> Server::get_client(const std::string id) const
 {
     // actually using auto is better
     for (pair<shared_ptr<Client>, double> rollPair : clients) {
@@ -43,9 +59,19 @@ double Server::get_wallet(std::string id)
     }
     return 0;
 }
-bool Server::parse_trx(std::string trx, std::string sender, std::string receiver, double value)
+bool Server::parse_trx(std::string trx, std::string& sender, std::string& receiver, double& value)
 {
-    return false;
+    // well, this function really helps me to learn regex and static member function !
+    // barvo!
+    std::regex pattern("([a-zA-Z]+)-([a-zA-Z]+)-([\\d.]+)");
+    std::smatch matches;
+    if (!std::regex_match(trx, matches, pattern)) {
+        throw runtime_error("input trx is not valid!");
+    }
+    sender = matches[1];
+    receiver = matches[2];
+    value = std::stod(matches[3]);
+    return true;
 }
 bool Server::add_pending_trx(std::string trx, std::string signature)
 {

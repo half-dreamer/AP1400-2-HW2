@@ -3,6 +3,7 @@
 #include "gmock/gmock.h"
 #include "server.h"
 #include "client.h"
+#include "crypto.h"
 
 TEST(HW1Test, TEST1) {
     Server server{};
@@ -23,7 +24,6 @@ TEST(HW1Test, TEST3) {
     EXPECT_DOUBLE_EQ(bryan->get_wallet(), 5.0);
 }
 
-/*
 TEST(HW1Test, TEST4) {
     Server server{};
     auto bryan1{server.add_client("bryan")};
@@ -56,14 +56,12 @@ TEST(HW1Test, TEST7) {
     auto client = p->get_client("no_one");
     EXPECT_TRUE(client == nullptr);
 }
-
 TEST(HW1Test, TEST8) {
     Server server{};
     auto bryan{server.add_client("bryan")};
     auto clint{server.add_client("clint")};
     show_wallets(server);
 }
-
 TEST(HW1Test, TEST9) {
     Server server{};
     auto bryan{server.add_client("bryan")};
@@ -73,7 +71,6 @@ TEST(HW1Test, TEST9) {
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "notmydata", signature));
     EXPECT_FALSE(crypto::verifySignature(p->get_publickey(), "mydata", "not_my_signature"));
 }
-
 TEST(HW1Test, TEST10) {
     std::string sender{}, receiver{};
     double value;
@@ -88,7 +85,7 @@ TEST(HW1Test, TEST11) {
     double value;
     EXPECT_THROW(Server::parse_trx("sarah-clay_0.5", sender, receiver, value), std::runtime_error);
 }
-
+/*
 TEST(HW1Test, TEST12) {
     Server server{};
     auto bryan{server.add_client("bryan")};
