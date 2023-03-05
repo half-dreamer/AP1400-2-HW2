@@ -1,6 +1,7 @@
 #include "client.h"
 #include "server.h"
 #include "crypto.h"
+#include <random>
 
 using std::string;
 
@@ -37,9 +38,20 @@ std::string Client::sign(std::string txt) const
 }
 bool Client::transfer_money(std::string receiver, double value) 
 {
+    if (server->get_client(receiver) == nullptr) {
+        return false;
+    }
+    string trx;
+    trx = id + "-" + receiver + "-" + std::to_string(value); // use std::to_string(value)
+    if (server->add_pending_trx(trx, sign(id)) == false) {
+        return false;
+    }
     return true;
 }
 size_t Client::generate_nonce() 
 {
-    return 0;
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> dis(10, 99);
+        return dis(gen);
 }

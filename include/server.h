@@ -5,6 +5,7 @@
 #include <map>
 #include <memory>
 #include <iostream>
+#include <vector>
 #include "client.h"
 
 
@@ -25,5 +26,6 @@ public:
 private:
 	std::map<std::shared_ptr<Client>, double> clients; // pair<client, wallet>
 };
+   	extern std::vector<std::string> pending_trxs; 
 
 #endif //SERVER_H

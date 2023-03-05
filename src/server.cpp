@@ -1,20 +1,23 @@
 #include "server.h"
 #include "client.h"
+#include "crypto.h"
 #include <random>
 #include <regex>
 
 using std::make_pair;
 using std::make_shared;
 using std::pair;
+using std::shared_ptr;
 using std::logic_error;
+using std::string;
 using std::runtime_error;
+
 
 /*  
 class Server: 
     private:
 	std::map<std::shared_ptr<Client>, double> clients; // pair<client, wallet>
 */
-
  void show_wallets(const  Server& server)
  {
  	std::cout << std::string(20, '*') << std::endl;
@@ -75,9 +78,31 @@ bool Server::parse_trx(std::string trx, std::string& sender, std::string& receiv
 }
 bool Server::add_pending_trx(std::string trx, std::string signature)
 {
-    return false;
+    string sender, receiver;
+    double value;
+    if (parse_trx(trx, sender, receiver, value) == false) {
+        return false;
+    }
+    // authenticate the string
+    shared_ptr<Client> senderPtr = get_client(sender);
+    if (senderPtr == nullptr) {
+        return false;
+    }
+    if (crypto::verifySignature(senderPtr->get_publickey(), senderPtr->get_id(), signature) == false) {
+        return false;
+    }
+    if (senderPtr->get_wallet() < value) {
+        return false;
+    }
+    pending_trxs.push_back(trx);
+    return true;
 }
 size_t Server::mine()
 {
-    return 0;
+    size_t mine = 0;
+    for (auto map : clients)
+    {
+        mine += map.first->generate_nonce();
+    }
+    return mine;
 }

@@ -12,6 +12,7 @@ class Server;
 class Client
 {
 public:
+	Client() = default;
 	Client(std::string id, Server& server);
 	std::string get_id() const;
 	std::string get_publickey() const;
@@ -25,5 +26,4 @@ private:
 	std::string public_key;
 	std::string private_key;
 };
-
 #endif //CLIENT_H
