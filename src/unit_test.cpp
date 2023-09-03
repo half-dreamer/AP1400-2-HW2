@@ -1,4 +1,3 @@
-
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "server.h"
@@ -142,6 +141,7 @@ TEST(HW1Test, TEST15) {
     EXPECT_TRUE(clint->get_wallet()==3.5 ||clint->get_wallet()==3.5 ||clint->get_wallet()==9.75);
     EXPECT_TRUE(sarah->get_wallet()==13.25 || sarah->get_wallet()==7 || sarah->get_wallet()==7);
 }
+*/
 
 
 
